@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Loading...</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100%;
+      font-family: Arial, sans-serif;
+      background-color: black;
+      color: white;
+    }
+
+    .page {
+      display: none;
+      height: 100%;
+      width: 100%;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      font-size: 2rem;
+      font-weight: bold;
+    }
+
+    #page1 {
+      display: flex;
+      background-color: black;
+    }
+
+    #loading-bar-container {
+      width: 80%;
+      height: 25px;
+      background-color: #333;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 20px;
+    }
+
+    #loading-bar {
+      width: 0%;
+      height: 100%;
+      background-color: limegreen;
+      transition: width 2s linear;
+    }
+
+    #page2 {
+      display: flex;
+      background-color: yellow;
+      color: black;
+    }
+
+    .spinner {
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid black;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+      margin-top: 20px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    #page3 {
+      display: flex;
+      background-color: red;
+      color: black;
+      transition: background-color 0.05s;
+    }
+
+    #message {
+      text-align: center;
+      font-size: 3rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Page 1: Loading Bar -->
+  <div id="page1" class="page">
+    <div>Loading...</div>
+    <div id="loading-bar-container">
+      <div id="loading-bar"></div>
+    </div>
+  </div>
+
+  <!-- Page 2: Spinner + Message -->
+  <div id="page2" class="page">
+    <div>⚠️ Don't panic, wait a second... ⚠️</div>
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Page 3: Hacked Message -->
+  <div id="page3" class="page">
+    <div id="message">💀 YOUR DATA HACKED BY MR.DOT 💀</div>
+  </div>
+
+  <script>
+    // Step 1: Show page 1 and animate loading bar
+    document.getElementById("page1").style.display = "flex";
+    setTimeout(() => {
+      document.getElementById("loading-bar").style.width = "100%";
+    }, 100);
+
+    // Step 2: After 2.1s, go to page 2
+    setTimeout(() => {
+      document.getElementById("page1").style.display = "none";
+      document.getElementById("page2").style.display = "flex";
+    }, 2100);
+
+    // Step 3: After 5s total (2s + 3s), go to page 3
+    setTimeout(() => {
+      document.getElementById("page2").style.display = "none";
+      document.getElementById("page3").style.display = "flex";
+
+      // Flashing background colors
+      let colors = ["red", "white"];
+      let index = 0;
+      setInterval(() => {
+        document.getElementById("page3").style.backgroundColor = colors[index];
+        index = (index + 1) % colors.length;
+      }, 100);
+    }, 5100);
+
+    // Fullscreen on interaction
+    function goFullscreen() {
+      let docEl = document.documentElement;
+      if (docEl.requestFullscreen) {
+        docEl.requestFullscreen();
+      } else if (docEl.mozRequestFullScreen) {
+        docEl.mozRequestFullScreen();
+      } else if (docEl.webkitRequestFullscreen) {
+        docEl.webkitRequestFullscreen();
+      } else if (docEl.msRequestFullscreen) {
+        docEl.msRequestFullscreen();
+      }
+    }
+
+    document.body.addEventListener("click", goFullscreen);
+    document.body.addEventListener("keydown", goFullscreen);
+  </script>
+</body>
+</html>
