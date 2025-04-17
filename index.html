@@ -2,14 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Loading...</title>
+  <title>Surprise...</title>
+  <link href="https://fonts.googleapis.com/css2?family=Hack&family=Overpass+Mono&family=Press+Start+2P&family=Space+Mono&family=Montserrat&display=swap" rel="stylesheet">
   <style>
     html, body {
       margin: 0;
       padding: 0;
       overflow: hidden;
       height: 100%;
-      font-family: Arial, sans-serif;
+      font-family: 'Hack', monospace;
       background-color: black;
       color: white;
     }
@@ -23,11 +24,16 @@
       flex-direction: column;
       font-size: 2rem;
       font-weight: bold;
+      position: relative;
+      text-align: center;
     }
 
     #page1 {
       display: flex;
       background-color: black;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
 
     #loading-bar-container {
@@ -69,22 +75,129 @@
 
     #page3 {
       display: flex;
-      background-color: red;
-      color: black;
-      transition: background-color 0.05s;
+      background-color: black;
+      color: #00ff00;
+      font-family: 'Overpass Mono', monospace;
+      font-size: 1rem;
+      padding: 20px;
+      justify-content: flex-start;
+      align-items: flex-start;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      flex-direction: column;
     }
 
-    #message {
-      text-align: center;
+    #page4 {
+      display: flex;
+      background-color: red;
+      color: red;
       font-size: 3rem;
+      text-align: center;
+      transition: background-color 0.1s;
+    }
+
+    #flash-text {
+      font-size: 3rem;
+    }
+
+    #page5 {
+      display: flex;
+      background-color: #0a0a0a;
+      color: #ff0000;
+      font-family: 'Space Mono', monospace;
+      font-size: 2.5rem;
+      text-shadow: 2px 2px 6px #000;
+    }
+
+    #page6 {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: black;
+      color: #00ff00;
+      font-family: 'Montserrat', sans-serif;
+      text-align: center;
+    }
+
+    .terminal-text {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      animation: flicker 0.2s infinite alternate;
+    }
+
+    .just-kidding {
+      font-size: 3rem;
+      color: yellow;
+      animation: pop-in 1s ease-in-out forwards;
+      opacity: 0;
+    }
+
+    .lol-line {
+      margin-top: 30px;
+      font-size: 1.5rem;
+      color: white;
+    }
+
+    @keyframes flicker {
+      from { opacity: 0.3; }
+      to { opacity: 1; }
+    }
+
+    @keyframes pop-in {
+      0% { opacity: 0; transform: scale(0.5); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    /* Media Queries */
+    @media (min-width: 1024px) {
+      #page3 {
+        font-size: 2rem;
+      }
+
+      .terminal-output {
+        font-size: 2.5rem;
+      }
+    }
+
+    @media (max-width: 1023px) {
+      #page3 {
+        font-size: 1.2rem;
+      }
+
+      .terminal-output {
+        font-size: 1.5rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      #page3 {
+        font-size: 1rem;
+      }
+
+      .terminal-output {
+        font-size: 1.2rem;
+      }
+    }
+
+    /* Cursor effect */
+    .cursor {
+      border-right: 2px solid #00ff00;
+      animation: blink 0.7s step-end infinite;
+    }
+
+    @keyframes blink {
+      50% {
+        border-color: transparent;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- Page 1: Loading Bar -->
+  <!-- Page 1: Loading -->
   <div id="page1" class="page">
-    <div>Loading...</div>
+    <div>Connecting to server...</div>
     <div id="loading-bar-container">
       <div id="loading-bar"></div>
     </div>
@@ -92,41 +205,162 @@
 
   <!-- Page 2: Spinner + Message -->
   <div id="page2" class="page">
-    <div>⚠️ wait a second there is a surprise for you get ready... ⚠️</div>
+    <div>⚠️ Wait a second, there's a surprise for you. Get ready... ⚠️</div>
     <div class="spinner"></div>
   </div>
 
-  <!-- Page 3: Hacked Message -->
+  <!-- Page 3: Hacking Terminal -->
   <div id="page3" class="page">
-    <div id="message">💀 YOUR DATA HACKED BY MR.DOT 💀</div>
+    <div class="terminal-output" id="terminalOutput"></div>
+  </div>
+
+  <!-- Page 4: Flashing Warning -->
+  <div id="page4" class="page">
+    <div id="flash-text">
+      💀 WARNING SYSTEM BREACH 💀<br>
+      ⚠️WAIT.......  There's a surprise in the next page. ⚠️
+    </div>  
+  </div>
+
+  <!-- Page 5: Creepy Message -->
+  <div id="page5" class="page">
+    <div>💀🎃 YOUR DATA IS SAFE WITH MR.DOT  💀🎃</div>
+    <div>👁️ WAIT A SECOND I WILL SHOW SOME 👁️ </div>
+  </div>
+
+  <!-- Page 6: Funny Ending -->
+  <div id="page6" class="page">
+    <div class="terminal-text">⚠ SYSTEM BREACHED! ⚠</div>
+    <div class="just-kidding">JUST KIDDING 😂</div>
+    <div class="lol-line">Thanks for trusting Mr.DOT.<br>You're now 0% hacked... 100% TROLLED. 🤣</div>
   </div>
 
   <script>
-    // Step 1: Show page 1 and animate loading bar
+    // Page 1: Loading
     document.getElementById("page1").style.display = "flex";
     setTimeout(() => {
       document.getElementById("loading-bar").style.width = "100%";
     }, 100);
 
-    // Step 2: After 2.1s, go to page 2
+    // Page 2: Spinner
     setTimeout(() => {
       document.getElementById("page1").style.display = "none";
       document.getElementById("page2").style.display = "flex";
     }, 2100);
 
-    // Step 3: After 5s total (2s + 3s), go to page 3
+    // Page 3: Hacking Terminal
     setTimeout(() => {
       document.getElementById("page2").style.display = "none";
       document.getElementById("page3").style.display = "flex";
 
-      // Flashing background colors
-      let colors = ["red", "white"];
-      let index = 0;
-      setInterval(() => {
-        document.getElementById("page3").style.backgroundColor = colors[index];
-        index = (index + 1) % colors.length;
-      }, 100);
+      const terminalLines = [
+      "Connecting to target system...",
+
+      "Bypassing firewall...",
+
+      "Access granted.",
+
+      "Scanning network...",
+
+      "Compromising node 4...",
+
+      "Inserting backdoor...",
+
+      "Exfiltrating sensitive data...",
+
+      "Encrypting files...",
+
+      "System control overridden.",
+
+      "Activating self-destruct sequence...",
+
+      "Sending data to dark web...",
+
+      "Injecting malware...",
+
+      "Triggering ransomware payload...",
+
+      "Data breach confirmed...",
+
+      "Secure data stolen...",
+
+      "Final command: SYSTEM OVERRIDE IN PROGRESS...",
+
+      "Accessing encryption keys...",
+
+      "Hacking authentication protocols...",
+
+      "Shutting down antivirus software...",
+
+      "Injecting rootkit...",
+
+      "Redirecting system traffic...",
+
+      "Disabling system security features...",
+
+      "Erasing system logs...",
+
+      "Establishing persistent access...",
+
+      "💥 BOOM 💥 Password ********.",
+      "Accessing encryption keys...",
+     "Hacking authentication protocols...",
+     "Shutting down antivirus software...",
+     "Injecting rootkit...",
+     "Redirecting system traffic...",
+     "Disabling system security features...",
+     "Erasing system logs...",
+     "Deploying keylogger...",
+     "Manipulating system time...",
+     "Bypassing system backup procedures..."
+
+
+      ];
+
+      let output = document.getElementById("terminalOutput");
+      let i = 0;
+      let typingSpeed = 100; // Faster typing speed
+
+      function typeLine() {
+        if (i < terminalLines.length) {
+          output.innerHTML += terminalLines[i] + '<span class="cursor">|</span>';
+          i++;
+          setTimeout(typeLine, typingSpeed); // Speed up text
+        }
+      }
+
+      typeLine();
     }, 5100);
+
+    // Page 4: Flashing page after terminal (increased time to 5 seconds)
+    setTimeout(() => {
+      document.getElementById("page3").style.display = "none";
+      document.getElementById("page4").style.display = "flex";
+
+      let colors = ["red", "blue"];
+      let textColors = ["yellow", "white"];
+      let i = 0;
+      setInterval(() => {
+        document.getElementById("page4").style.backgroundColor = colors[i % 2];
+        document.getElementById("flash-text").style.color = textColors[i % 2];
+        i++;
+      }, 100);
+    }, 11100);  // Increased time to 5 seconds
+
+    // Page 5: Creepy message after flashing
+    setTimeout(() => {
+      document.getElementById("page4").style.display = "none";
+      document.getElementById("page5").style.display = "flex";
+    }, 16100);  // Adjusted timing
+
+    // Page 6: Funny ending
+    setTimeout(() => {
+      document.getElementById("page5").style.display = "none";
+      document.getElementById("page6").style.display = "flex";
+      setTimeout(() => {
+        document.querySelector('.just-kidding').style.opacity = 1;
+      }, 1000);
+    }, 20100);  // Adjusted timing
 
     // Fullscreen on interaction
     function goFullscreen() {
